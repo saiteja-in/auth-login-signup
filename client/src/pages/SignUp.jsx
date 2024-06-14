@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link,useNavigate } from "react-router-dom";
+import axios from 'axios'
 
 const SignUp = () => {
   const [formData, setFormData] = useState({});
@@ -8,6 +9,7 @@ const SignUp = () => {
   const navigate=useNavigate();
   const handleChange = (e) => {
     setFormData({...formData,[e.target.id]:e.target.value});
+    console.log(formData);
   };
   // const handleChange = (event) => {
   //   const { id, value } = event.target;
@@ -21,14 +23,8 @@ const SignUp = () => {
     try {
       setLoading(true);
       setError(false)
-      const res=await fetch('/api/auth/signup',{
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-        },
-        body:JSON.stringify(formData)
-      });
-      const data=await res.json();
+      const res=await axios.post('/api/auth/signup',formData)
+      const data=res.data;
       setLoading(false);
       if(data.success===false){
         setError(true);
